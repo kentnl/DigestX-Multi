@@ -333,7 +333,14 @@ However, this makes the data less useful for applications where a digest is
 used to hide/validate some data using a shared secret, as re-using the same
 shared secret with the same content under multiple digests slightly increases
 the total number of bits that may relate to the secret, and increases the
-chance that the secret may be obtained by breaking a favourable algorithm.
+chance that the secret may be obtained by breaking a favorable algorithm.
+
+Note that of course, you should not really be using naive secret-prefix or
+secret-suffix based message digest authentication, but you should instead use
+a L<< proper C<HMAC> algorithm
+|https://rdist.root.org/2009/10/29/stop-using-unsafe-keyed-hashes-use-hmac/ >>,
+otherwise you're exposing yourself to a L<< length extension attack
+|https://www.happybearsoftware.com/you-are-dangerously-bad-at-cryptography.html >>
 
 =head1 METHODS
 
