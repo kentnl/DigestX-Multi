@@ -12,6 +12,7 @@ my @files = (
     't/00-report-prereqs.dd',
     't/00-report-prereqs.t',
     't/algos/md5.t',
+    't/algos/sha-trunc.t',
     't/algos/sha.t',
     't/algos/sha3.t',
     't/algos/whirlpool.t',

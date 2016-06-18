@@ -105,7 +105,7 @@ do { my $x = {
                                    'perl' => '5.006'
                                  },
                    'suggests' => {
-                                   'Digest::SHA' => '0',
+                                   'Digest::SHA' => '5.60',
                                    'Digest::SHA3' => '0',
                                    'Digest::Whirlpool' => '0'
                                  }
