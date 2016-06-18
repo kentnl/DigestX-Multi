@@ -230,6 +230,23 @@ sub assert_valid {
   croak "Hash digests failed validation against expected:\n\t-" . ( join qq[,\n\t], @errs ) . "\n at ";
 }
 
+# This string comparison is intentionally sub-optimal to avoid timing attacks
+# based on the fact a mismatching digest will return faster than a matching one.
+sub _teq {
+  ## no critic (ProhibitAmbiguousNames)
+  my ( $left, $right ) = @_;
+  return q[] if not defined $left or not defined $right;
+  return q[] if ( length $left ) != ( length $right );
+  my (@left)  = map { ord } split //sx, $left;
+  my (@right) = map { ord } split //sx, $right;
+  my $sum;
+
+  # Counts the number of characters that don't match using XOR
+  ## no critic (ProhibitBitwiseOperators)
+  $sum += $left[$_] ^ $right[$_] for 0 .. $#left;
+  return 0 == $sum;
+}
+
 sub _validity_map {
   my ( $self, @args ) = @_;
   my $arg_hash = { ref $args[0] ? %{ $args[0] } : @args };
@@ -250,7 +267,7 @@ sub _validity_map {
   for my $key ( keys %all_keys ) {
     ( push @results, { pass => 0, reason => "KEY:$key:MISSING", } ), next if !exists $got_hash{$key};
     ( push @results, { pass => 0, reason => "KEY:$key:EXCESS", } ),  next if !exists $want_hash{$key};
-    ( push @results, { pass => 0, reason => "KEY:$key:NOMATCH", } ), next if $got_hash{$key} ne $want_hash{$key};
+    ( push @results, { pass => 0, reason => "KEY:$key:NOMATCH", } ), next if !_teq( $got_hash{$key}, $want_hash{$key} );
     push @results, { pass => 1, reason => "KEY:$key:MATCH", };
   }
   return @results;
