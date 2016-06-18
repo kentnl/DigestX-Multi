@@ -48,6 +48,7 @@ sub new {
 sub add_digester {
   my ( $self, $name, $digester, ) = @_;
   croak "Can't add digester with name $name, one already exists" if exists $self->{digesters}->{$name};
+  croak "Did not pass object for $name, got undef" unless defined $digester;
   $self->{digesters}->{$name} = $digester;
   return $self;
 }
@@ -65,7 +66,11 @@ sub clone {
   my ( $self, ) = @_;
   my $class = ref $self;
   my $clone = bless {}, $class;
-  $clone->{digesters}->{$_} = $self->{digesters}->{$_}->clone for keys %{ $self->{digesters} || {} };
+  for ( keys %{ $self->{digesters} || {} } ) {
+    my $clone_digester = $self->{digesters}->{$_}->clone;
+    croak $self->{digesters}->{$_} . "->clone() returned undef for $_" if not defined $clone_digester;
+    $clone->{digesters}->{$_} = $clone_digester;
+  }
   return $clone;
 }
 
@@ -183,7 +188,11 @@ sub digests {
     $ref;
   };
   my $result = {};
-  $result->{$_} = $arg_hash->{encode}->( $self->{digesters}->{$_}->clone->digest ) for keys %{ $self->{digesters} || {} };
+  for ( keys %{ $self->{digesters} || {} } ) {
+    my $clone = $self->{digesters}->{$_}->clone;
+    croak "Clone of $self->{digesters}->{$_} for $_ returned undef" if not defined $clone;
+    $result->{$_} = $arg_hash->{encode}->( $clone->digest );
+  }
   return $result;
 }
 
