@@ -300,6 +300,24 @@ sub _validity_map {
 
 =cut
 
+=head1 DESCRIPTION
+
+C<Digest::Many> aims to simplify common work-flows that are necessary
+where-ever somebody might wish to compute multiple digests for the same
+content, specifically, with care not to need to open the same files for
+multiple passes.
+
+The need to do so arises in especially paranoid situations where the potential
+concern involves the potential of any one digest algorithm to be attacked and
+have a collision built for, based on the notion that finding one collision for
+a given algorithm is hard enough, but it aught to be many orders of magnitude
+more difficult to generate a collision that simultaneously collides under two
+or more algorithms.
+
+Thus, increasing the number of digest algorithms used exponentially hardens
+your attack surface, slightly more so than increasing the digest size of a
+single algorithm would achieve.
+
 =head1 VALIDATION
 
 Validation rules are as follows:
