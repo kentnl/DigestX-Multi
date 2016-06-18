@@ -13,6 +13,9 @@ do { my $x = {
                                         'Test::More' => '0.99'
                                       },
                       'requires' => {
+                                      'Digest::SHA' => '5.60',
+                                      'Digest::SHA3' => '0',
+                                      'Digest::Whirlpool' => '0',
                                       'Dist::Zilla' => '5',
                                       'Dist::Zilla::Plugin::Author::KENTNL::CONTRIBUTING' => '0.001003',
                                       'Dist::Zilla::Plugin::Author::KENTNL::RecommendFixes' => '0.004002',
