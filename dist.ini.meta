@@ -27,6 +27,6 @@ Test::ReportPrereqs.include[1] = Digest::base
 Digest::MD5   = 0
 
 [Prereqs / TestSuggests]
-Digest::SHA   = 0
+Digest::SHA   = 5.60
 Digest::SHA3  = 0
 Digest::Whirlpool = 0
