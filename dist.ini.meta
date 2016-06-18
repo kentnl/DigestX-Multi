@@ -30,3 +30,8 @@ Digest::MD5   = 0
 Digest::SHA   = 5.60
 Digest::SHA3  = 0
 Digest::Whirlpool = 0
+
+[Prereqs / DevelopRequires]
+Digest::SHA = 5.60
+Digest::SHA3 = 0
+Digest::Whirlpool = 0
