@@ -70,14 +70,55 @@ sub test_algo {
 
   my $copy = $md->clone();
 
-  $builder->ok( $md->is_valid( { format => 'base64', digests => $hash_3 } ), "$label: Original Should validate against identical hash after a clone" );
-  $builder->ok( $copy->is_valid( { format => 'base64', digests => $hash_3 } ), "$label: Clone Should validate against identical hash after a clone" );
+  my $ltest = $builder->ok(
+    $md->is_valid( { format => 'base64', digests => $hash_3 } ),
+    "$label: Original Should validate against identical hash after a clone"
+  );
+  undef $ltest
+    unless $builder->ok(
+    $copy->is_valid( { format => 'base64', digests => $hash_3 } ),
+    "$label: Clone Should validate against identical hash after a clone"
+    );
+
+  if ( not $ltest ) {
+    require Test::More;
+    $builder->diag(
+      Test::More::explain(
+        {
+          hash_cmp => $hash_3,
+          orig     => [ $md->_validity_map( { format => 'base64', digests => $hash_3 } ) ],
+          orig_hash => $md->digests( format => 'base64' ),
+          copy      => [ $copy->_validity_map( { format => 'base64', digests => $hash_3 } ) ],
+          copy_hash => $copy->digests( format  => 'base64' ),
+        }
+      )
+    );
+  }
 
   $copy->reset_digesters();
 
-  $builder->ok( $md->is_valid( { format => 'base64', digests => $hash_3 } ), "$label: Original Should validate against identical hash after a clone+reset" );
-  $builder->ok( !$copy->is_valid( { format => 'base64', digests => $hash_3 } ), "$label: Clone Should not validate against identical hash after a clone+reset" );
+  $ltest = $builder->ok( $md->is_valid( { format => 'base64', digests => $hash_3 } ),
+    "$label: Original Should validate against identical hash after a clone+reset" );
+  undef $ltest
+    unless $builder->ok(
+    !$copy->is_valid( { format => 'base64', digests => $hash_3 } ),
+    "$label: Clone Should not validate against identical hash after a clone+reset"
+    );
 
+  if ( not $ltest ) {
+    require Test::More;
+    $builder->diag(
+      Test::More::explain(
+        {
+          hash_cmp => $hash_3,
+          orig     => [ $md->_validity_map( { format => 'base64', digests => $hash_3 } ) ],
+          orig_hash => $md->digests( format => 'base64' ),
+          copy      => [ $copy->_validity_map( { format => 'base64', digests => $hash_3 } ) ],
+          copy_hash => $copy->digests( format  => 'base64' ),
+        }
+      )
+    );
+  }
 
 }
 
