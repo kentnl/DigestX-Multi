@@ -318,6 +318,12 @@ Thus, increasing the number of digest algorithms used exponentially hardens
 your attack surface, slightly more so than increasing the digest size of a
 single algorithm would achieve.
 
+However, this makes the data less useful for applications where a digest is
+used to hide/validate some data using a shared secret, as re-using the same
+shared secret with the same content under multiple digests slightly increases
+the total number of bits that may relate to the secret, and increases the
+chance that the secret may be obtained by breaking a favourable algorithm.
+
 =head1 VALIDATION
 
 Validation rules are as follows:
